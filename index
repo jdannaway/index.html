@@ -1,0 +1,112 @@
+<html>
+
+<head>
+  <script>
+    // Set the path to your videos here (enter: "" if this is in the same file as your videos)
+    let videoFolder = '""';
+    // Add your list of videos or mp3s here
+    const videosList = [
+      'Bougar.mp4',
+      'Bro och.mp4',
+      'Chef Goldblum.mp4',
+      'Cinco Boy 1.mp4',
+      'Cinco Boy 2.mp4',
+      'Cinco Phone.mp4', 
+      'Cinco Urinal Shower System.mp4',
+      'Diarrheaphragm.mp4',
+      'Dick Dousche.mp4',
+      'D-Pants.mp4',
+      'Dump.mp4',
+      'E Trial.mp4',
+      'Eye Tanning.mp4',
+      'EZ Cream.mp4',
+      'Facts Machine.mp4',
+      'Hamb.mp4',
+      'Innernette.mp4',
+      'Its Not Jackie Chan.mp4',
+      'My Eggs.mp4',
+      'My New Pep Pep.mp4',
+      'Napple.mp4',
+      'Sleepwatching Chair.mp4',
+      'Thocks.mp4'
+    ];
+
+    // This video will be played after EVERY video
+    // Set it to a single mp4 file or set to "" if you don't want to use it
+    const transitionVideo = '""'; // example: 'transition.mp4'
+    // Set to true if you only want one video to play and then stop
+    const playOnlyOne = false;
+    // Set to true if you want to keep looping the first video selected (does nothing if playOnlyOne is true)
+    const loopFirstVideo = false;
+
+    ///////////////////////////
+    // DON'T EDIT BELOW THIS //
+    //////////////////////////
+    videoFolder = videoFolder.substring(videoFolder.length -1) === '/' || videoFolder === "" ? videoFolder : `${videoFolder}/`;
+    const videos = shuffleArr(videosList);
+    let count = 0;
+    let player = null;
+    let mp4Source = null;
+    let isTransition = true;
+
+    function shuffleArr(a) {
+      var j, x, i;
+      for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+      }
+      return a;
+    }
+
+    function setVideoPlayer(video) {
+      if (!video) video = `${videoFolder}${videos[0]}`;
+      if (typeof video === 'number') video = `${videoFolder}${videos[video]}`;
+      mp4Source.setAttribute("src", video);
+      player.load();
+      player.play();
+    }
+
+    function playNext() {
+      if(!loopFirstVideo) {
+        if (!transitionVideo || !isTransition) {
+          count++;
+        }
+      }
+
+      if (count > videos.length - 1) count = 0;
+      if (!playOnlyOne) {
+        if (transitionVideo && transitionVideo !== "" && isTransition) {
+          setVideoPlayer(`${videoFolder}${transitionVideo}`);
+          isTransition = false;
+        } else {
+          setVideoPlayer(count);
+          isTransition = true;
+        }
+      }
+    }
+  </script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <video id="videoPlayer" autoplay width="100%" height="100%"
+    style="position:fixed; right:0; bottom:0; min-width:100%; min-height:100%;">
+    <source src="" id="mp4Source" type="video/mp4" />
+  </video>
+  <script>
+    player = document.getElementById("videoPlayer");
+    player.addEventListener("ended", playNext, {passive: true});
+    mp4Source = document.getElementById("mp4Source");
+    setVideoPlayer();
+  </script>
+</body>
+
+</html>
